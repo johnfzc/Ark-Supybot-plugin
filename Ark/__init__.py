@@ -66,7 +66,3 @@ configure = config.configure
 
 
 # vim:set shiftwidth=4 tabstop=4 expandtab textwidth=79:
-
-def __init__(self, irc):
-    self.__parent = super(Ark, self)
-    self.__parent.__init__(irc)

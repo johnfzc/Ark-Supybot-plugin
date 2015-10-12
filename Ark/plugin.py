@@ -41,22 +41,62 @@ except ImportError:
     # without the i18n module
     _ = lambda x: x
 
+import valve.source.a2s
+import re
+
+
 
 class Ark(callbacks.Plugin):
     """Report Ark Server Status"""
     threaded = True
 
+    def ark(self, irc, msg, args):
+        """takes no arguments
+
+        Returns the server status
+        """
+
+        serverDetails=("server.name.or.ip",34001)
+
+        # ExtremeSIMs
+        server = valve.source.a2s.ServerQuerier(serverDetails,timeout=3)
+
+        try:
+            info = server.get_info()
+            players = server.get_players()
+        except Exception:
+            irc.reply("Server Timeout")
+            exit(1)
+
+        info = server.get_info()
+        players = server.get_players()
+
+        serverName=info["server_name"]
+
+        m=re.search(r"(.*) - \(.*\)$",serverName)
+        if m is not None:
+            serverName=m.group(1)
+
+        serverSlots="({player_count}/{max_players})".format(**info)
+
+        connecting=0
+
+        playerNames=[]
+        for player in players["players"]:
+            if player["name"]=="":
+                connecting+=1
+            else:
+                playerNames.append(player["name"])
+
+        if connecting==0:
+            irc.reply("{} {} {}".format(serverName,serverSlots,", ".join(playerNames)))
+        elif connecting==info["player_count"]:
+            irc.reply("{} {} {} connecting".format(serverName,serverSlots,connecting))
+        else:
+            irc.reply("{} {} {} and {} connecting".format(serverName,serverSlots,", ".join(playerNames),connecting))
+
+    ark = wrap(ark)
 
 Class = Ark
-
-def ark(self, irc, msg, args):
-    """takes no arguments
-
-    Returns the next random number from the random number generator.
-    """
-    irc.reply("Ark Status?")
-
-ark = wrap(ark)
-
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab textwidth=79:
