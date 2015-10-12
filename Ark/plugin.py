@@ -58,7 +58,6 @@ class Ark(callbacks.Plugin):
 
         serverDetails=("server.name.or.ip",34001)
 
-        # ExtremeSIMs
         server = valve.source.a2s.ServerQuerier(serverDetails,timeout=3)
 
         try:
@@ -72,6 +71,10 @@ class Ark(callbacks.Plugin):
         players = server.get_players()
 
         serverName=info["server_name"]
+
+        # Remove version string from server name, Ark servers return
+        # the following form:
+        # ARK-PvP.com [20xFarm][30xEXP][50xTame][FRESHWIPE] - (v218.7)
 
         m=re.search(r"(.*) - \(.*\)$",serverName)
         if m is not None:
