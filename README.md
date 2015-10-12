@@ -1,8 +1,10 @@
 # Installation
 
-Install the python-valve library using pip:
+Install the python-valve library using pip. Be sure to use the appropriate version of pip/python for your Supybot instance:
 
+```
 pip3 install git+https://github.com/PhilipCammarata/python-valve.git
+```
 
 Download the plugin from github and place in your Supybot / Limnoria plugins directory.
 
@@ -10,7 +12,9 @@ Download the plugin from github and place in your Supybot / Limnoria plugins dir
 
 You need to configure the serverDetails variable with the DNS name or IP of your Ark server in plugin.py, line 59:
 
-```serverDetails=("server.name.or.ip",34001)```
+```
+serverDetails=("arkserver.example.com",34001)
+```
 
 # Known Issues
 
